@@ -1,0 +1,101 @@
+# ###########################################################################
+#
+#  CLOUDERA APPLIED MACHINE LEARNING PROTOTYPE (AMP)
+#  (C) Cloudera, Inc. 2021
+#  All rights reserved.
+#
+#  Applicable Open Source License: Apache 2.0
+#
+#  NOTE: Cloudera open source products are modular software products
+#  made up of hundreds of individual components, each of which was
+#  individually copyrighted.  Each Cloudera open source product is a
+#  collective work under U.S. Copyright Law. Your license to use the
+#  collective work is as provided in your written agreement with
+#  Cloudera.  Used apart from the collective work, this file is
+#  licensed for your use pursuant to the open source license
+#  identified above.
+#
+#  This code is provided to you pursuant a written agreement with
+#  (i) Cloudera, Inc. or (ii) a third-party authorized to distribute
+#  this code. If you do not have a written agreement with Cloudera nor
+#  with an authorized and properly licensed third party, you do not
+#  have any rights to access nor to use this code.
+#
+#  Absent a written agreement with Cloudera, Inc. (“Cloudera”) to the
+#  contrary, A) CLOUDERA PROVIDES THIS CODE TO YOU WITHOUT WARRANTIES OF ANY
+#  KIND; (B) CLOUDERA DISCLAIMS ANY AND ALL EXPRESS AND IMPLIED
+#  WARRANTIES WITH RESPECT TO THIS CODE, INCLUDING BUT NOT LIMITED TO
+#  IMPLIED WARRANTIES OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY AND
+#  FITNESS FOR A PARTICULAR PURPOSE; (C) CLOUDERA IS NOT LIABLE TO YOU,
+#  AND WILL NOT DEFEND, INDEMNIFY, NOR HOLD YOU HARMLESS FOR ANY CLAIMS
+#  ARISING FROM OR RELATED TO THE CODE; AND (D)WITH RESPECT TO YOUR EXERCISE
+#  OF ANY RIGHTS GRANTED TO YOU FOR THE CODE, CLOUDERA IS NOT LIABLE FOR ANY
+#  DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE OR
+#  CONSEQUENTIAL DAMAGES INCLUDING, BUT NOT LIMITED TO, DAMAGES
+#  RELATED TO LOST REVENUE, LOST PROFITS, LOSS OF INCOME, LOSS OF
+#  BUSINESS ADVANTAGE OR UNAVAILABILITY, OR LOSS OR CORRUPTION OF
+#  DATA.
+#
+# ###########################################################################
+
+# ================ [REQUIRED PARAMS] ================
+--model_type            bert          
+--model_name_or_path    deepset/bert-base-cased-squad2
+--output_dir            /home/cdsw/data/models/deepset-bert-base-cased-squad2
+
+# ================ [DATA PARAMS] ================
+--data_dir      /home/cdsw/data/medical       # The input data dir -- should contain Q&A examples as .json files
+--train_file    covid_bioasqa_train.json      # The input training file. If data_dir is specified, will look for the file there
+--predict_file  covid_bioasq_dev.json         # The input evaluation file. If data_dir is specified, will look for the file there
+#--verbose_logging                  # Uncomment this flag to print all warnings related to data processing 
+#--overwrite_output_dir             # Uncomment this flag to overwrite the content of the output directory
+#--overwrite_cache                  # Uncomment this flag to overwrite the cached training and/or evaluation datasets
+# TODO: CHANGE THE NAME OF THIS FLAG
+#--version_2_with_negative          # Uncomment this flag if working with examples wherein some do not have an answer 
+
+# ================ [OPTIONAL TRANSFORMER PARAMS] ================
+#--do_lower_case                    # Uncomment this flag if using an uncased model
+#--config_name                      # Specify name of a QA Model config file if loading from config (not common)
+#--tokenizer_name                   # Specify a tokenizer if named differently from model (not common)
+#--cache_dir                        # Directory for storing pre-trained models downloaded from the HF Model Repo; default is XXX
+--lang_id   0                       # 0 is English
+
+# ================ [QA BEHAVIOR PARAMS] ================
+--max_seq_length        384         # The maximum total input sequence length after tokenization
+--doc_stride            192         # Stride between segments when chunking long documents 
+--max_query_length      64          # Max number of tokens for the question
+--max_answer_length     148          # Max number of tokens allowed for the answer
+
+--null_score_diff_threshold 0.0
+--n_best_size   5                  # Number of top best predictions to generate for each question during evaluation 
+
+# ================ [EPOCHS / BATCHING / LOGGING -- MOSTLY ONLY FOR TRAINING] ================
+--num_train_epochs  2.0
+--per_gpu_train_batch_size  8
+--per_gpu_eval_batch_size   8      # If evaluating with a GPU - set the evaluation batch size
+--logging_steps 500
+--save_steps    -1
+--warmup_steps  0
+--max_steps     -1
+
+# ================ [OPTIMIZER PARAMS -- TRAINING ONLY] ================
+--learning_rate 3e-5
+--weight_decay  0.0
+--adam_epsilon  1e-8
+--max_grad_norm 1.0
+--gradient_accumulation_steps   1
+
+# ================ [MISC PARAMS] ================
+--seed          42
+--local_rank    -1
+--threads       12                  # Number of threads to use for CPU tasks
+--no_cuda                           # Uncomment this flag to not use CUDA even if available
+#--eval_all_checkpoints             # Uncomment this flag to evaluate checkpoints starting with the same prefix as model_name ending and ending with step number
+#--evaluate_during_training         # Uncomment this flag to run evaluation during training at each logging step
+
+
+# Uncomment the flags below to use 16-bit (mixed) precision (through NVIDIA apex) instead of 32-bit
+# Apex AMP optimization level selected in ['O0', 'O1', 'O2', and 'O3']
+# See details at https://nvidia.github.io/apex/amp.html" 
+#--fp16 
+#--fp16_opt_level    "O1"
