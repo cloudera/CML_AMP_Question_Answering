@@ -4,7 +4,7 @@ transformers==4.17.0
 tensorboardX==2.5
 tensorboard==2.8.0
 sentencepiece==0.1.96
-streamlit==1.8.1
+streamlit==1.10.0
 wikipedia==1.4.0
 rank_bm25==0.2.2
 -e . # installs local qa package in "edit" mode
